@@ -14,6 +14,26 @@ const render = require("./lib/htmlRenderer");
 const person = new Employee("Halyna", 1, "me@mail");
 
 console.log(person);
+
+inquirer
+.prompt([
+    {
+    "Are you a Engineer, Intern or Manager?": role,
+    },
+])
+
+console.log(role)
+
+// let role = "";
+// if (role = "Engineer") {
+//     return role
+// } if (role = "Manager") {
+//     return role
+// } if (role = "Intern") {
+//     return role
+// } else {
+//     prompt(err)
+// }
 ​
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
