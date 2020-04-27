@@ -12,13 +12,57 @@ const render = require("./lib/htmlRenderer");
 inquirer
 .prompt([
     {
+        type: "input",
+        name: "name",
+        message: "what is your full name?"
+    },
+    {
+        type: "input",
+        name: "email",
+        message: "what is your email address?"
+    },
+    {
+        type: "number",
+        name: "id",
+        message: "what is your ID?"
+    },
+    {
         type: "list",
         name: "role",
         message: "Are you a Engineer, Intern or Manager?",
-        choices: ["Engineer", "Intern", "Manager"],
+        choices: ["Engineer", "Intern", "Manager"]
     },
 ])
-.then(result => console.log(result));
+.then(result => {
+    if (result.role === "Engineer") {
+        inquirer
+        .prompt([
+            {
+            type: "input",
+            name: "github",
+            message: "what is your github username?"
+            }
+        ])
+    } if (result.role === "Intern") {
+        inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "school",
+                message: "what school do you attend?"
+                }
+        ])
+    } if (result.role === "Manager") {
+        inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "officeNumber",
+                message: "what is your office number?"
+                }
+        ])
+    }
+});
 
 
 // let role = "";
