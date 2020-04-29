@@ -9,87 +9,227 @@ const OUTPUT_DIR = path.resolve(__dirname, "output")
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 
-inquirer
-.prompt([
+const members = [];
+const id = [];
+
+function appMenu() {
+
+function createManager() {
+    console.log("Make your team")
+    inquirer
+    .prompt([
     {
         type: "input",
-        name: "name",
-        message: "what is your full name?"
-    },
-    {
-        type: "input",
-        name: "email",
-        message: "what is your email address?"
+        name: "managerName",
+        message: "what is the manager's name?",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            } else {
+                return "error";
+            }
+        }
     },
     {
         type: "number",
-        name: "id",
-        message: "what is your ID?"
+        name: "managerId",
+        message: "what is the manager's ID?",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            } else {
+                return "error";
+            }
+        }
     },
     {
-        type: "list",
-        name: "role",
-        message: "Are you a Engineer, Intern or Manager?",
-        choices: ["Engineer", "Intern", "Manager"]
-    },
-])
-.then(result => {
-    if (result.role === "Engineer") {
-        inquirer
-        .prompt([
-            {
-            type: "input",
-            name: "github",
-            message: "what is your github username?"
+        type: "input",
+        name: "managerEmail",
+        message: "what is the manager's email",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            } else {
+                return "error";
             }
-        ])
-    } if (result.role === "Intern") {
-        inquirer
-        .prompt([
-            {
-                type: "input",
-                name: "school",
-                message: "what school do you attend?"
-                }
-        ])
-    } if (result.role === "Manager") {
-        inquirer
-        .prompt([
-            {
-                type: "input",
-                name: "officeNumber",
-                message: "what is your office number?"
-                }
-        ])
-    }
+        }
+    },
+    {
+        type: "number",
+        name: "managerOfficeNumber",
+        message: "what is the manager's office number",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            } else {
+                return "error";
+            }
+        }
+    },
+]).then(result => {
+    const manager = new Manager(result.managerName, result.managerId, result.managerEmail, result.managerOfficeNumber);
+    members.push(manager);
+    id.push(result.managerId);
+    createTeam();
+    });
+}
+
+function createTeam() {
+    inquirer
+    .prompt([
+    {
+        type: "list",
+        name: "memberRole",
+        message: "What role would you like the next team member?",
+        choices: [
+            "Engineer", 
+            "Intern",
+            "My team is full"
+        ]
+    },
+    ]).then(roleChoice => {
+        switch(roleChoice.memberRole) {
+            case "Engineer":
+                makeEngineer();
+                break;
+            case "intern":
+                makeIntern();
+                break;
+            default:
+                makeTeam();
+        }
+    })
+}
+        
+function makeEngineer() {
+    inquirer.prompt([
+    {
+        type: "input",
+        name: "engineerName",
+        message: "what is the engineer's name?",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            } else {
+                return "error";
+            }
+        }
+    },
+    {
+        type: "number",
+        name: "engineerId",
+        message: "what is the engineer's ID?",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            } else {
+                return "error";
+            }
+        }
+    },
+    {
+        type: "input",
+        name: "engineerEmail",
+        message: "what is the engineer's email",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            } else {
+                return "error";
+            }
+        }
+    },
+    {
+        type: "input",
+        name: "engineerGithub",
+        message: "what is the engineer's Github username",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            } else {
+                return "error";
+            }
+        }
+    },
+]).then(result => {
+    const engineer = new Engineer(result.engineerName, result.engineerId, result.engineerEmail, result.engineerGithub);
+    members.push(engineer);
+    id.push(result.engineerId);
+    createTeam();
+  });
+}
+
+function makeIntern() {
+    inquirer.prompt([
+    {
+        type: "input",
+        name: "internName",
+        message: "what is the intern's name?",
+        validate: answer => {
+                if (answer !== "") {
+                return true;
+            } else {
+                return "error";
+            }
+        }
+    },
+    {
+        type: "number",
+        name: "internId",
+        message: "what is the intern's ID?",
+        validate: answer => {
+            if (answer !== "") {
+                    return true;
+            } else {
+                return "error";
+            }
+        }
+    },
+    {
+        type: "input",
+        name: "internEmail",
+        message: "what is the intern's email",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            } else {
+                return "error";
+            }
+        }
+    },
+    {
+        type: "input",
+        name: "internSchool",
+        message: "what school does the intern attend",
+        validate: answer => {
+            if (answer !== "") {
+            return true;
+            } else {
+                return "error";
+            }
+        }
+    },
+]).then(result => {
+    const intern = new Intern(result.internName, result.internId, result.internEmail, result.internSchool);
+    members.push(intern);
+    id.push(result.internId);
+    createTeam();
 });
+}
 
+function makeTeam() {
 
-// let role = "";
-// if (role = "Engineer") {
-//     return role
-// } if (role = "Manager") {
-//     return role
-// } if (role = "Intern") {
-//     return role
-// } else {
-//     prompt(err)
-// }
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an 
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work!```
+    if (!fs.existsSync(OUTPUT_DIR)) {
+        fs.mkdirSync(OUTPUT_DIR)
+      }
+      fs.writeFileSync(outputPath, render(members), "utf-8");
+}
+
+          
+createManager();
+
+}
+
+appMenu();
+              
+              
