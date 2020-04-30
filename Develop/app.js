@@ -75,8 +75,8 @@ function createManager() {
 }
 
 function createTeam() {
-    inquirer
-    .prompt([
+
+    inquirer.prompt([
     {
         type: "list",
         name: "memberRole",
@@ -86,13 +86,13 @@ function createTeam() {
             "Intern",
             "My team is full"
         ]
-    },
+    }
     ]).then(roleChoice => {
         switch(roleChoice.memberRole) {
             case "Engineer":
                 makeEngineer();
                 break;
-            case "intern":
+            case "Intern":
                 makeIntern();
                 break;
             default:
